@@ -31,10 +31,31 @@ app.use(cors({credentials: true, origin: true }));
 // Security HTTP headers
 
 //Helmet helps you to secure your express apps by setting various http headers.
-app.use(helmet({
-    contentSecurityPolicy: false,
-}))
+app.use(
+  helmet.contentSecurityPolicy({
+    directives: {
+      defaultSrc: ["'self'", 'data:', 'blob:'],
+ 
+      fontSrc: ["'self'", 'https:', 'data:'],
 
+      scriptSrc: ["'self'", 'unsafe-inline'],
+ 
+      scriptSrc: ["'self'", 'https://*.cloudflare.com'],
+
+      scriptSrc: ["'self'", 'https://*.stripe.com'],
+ 
+      scriptSrcElem: ["'self'",'https:', 'https://*.cloudflare.com'],
+
+      scriptSrcElem: ["'self'",'https:', 'https://*.stripe.com'],
+ 
+      styleSrc: ["'self'", 'https:', 'unsafe-inline'],
+ 
+      connectSrc: ["'self'", 'data', 'https://*.cloudflare.com'],
+
+      connectSrc: ["'self'", 'data', 'https://*.stripe.com']
+    },
+  })
+);
 
 
 // Developement logging
@@ -91,10 +112,10 @@ app.use((req,res,next)=>{
 });
 
 
-app.use(function(req, res, next) { 
-    res.setHeader( 'Content-Security-Policy', "script-src 'self' https://cdnjs.cloudflare.com" ); 
-    next(); 
-  })
+// app.use(function(req, res, next) { 
+//     res.setHeader( 'Content-Security-Policy', "script-src 'self' https://cdnjs.cloudflare.com" ); 
+//     next(); 
+//   })
 
 
 app.use('/', viewRouter);
